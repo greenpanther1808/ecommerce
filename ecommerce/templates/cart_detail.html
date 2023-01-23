@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+This is yoyr cart. please look into your cart and place your order.
+
+{% endblock %}
+{% block title %}
+    Cart-VP pvt ltd
+{% endblock %}
+{% block body %}
+{% if not cart_items %}
+<div>
+    <div class="text-center">
+        <br>
+        <h1 class="text-center my_title">
+            Your cart is empty.Bag some items.
+        </h1>
+        <br>
+        <p class="text-center">
+            Add to <a href="{% url 'ecomapp:allProdCat' %}">Cart</a>
+        </p>
+
+    </div>
+</div>
+{% else %}
+<div>
+    <div class="text-center">
+         <br>
+        <h1 class="text-center my_title">
+            Your Cart
+        </h1>
+        <br>
+    </div>
+</div>
+<div class="row mx-auto">
+    <div class="col-12 col-sm-12 col-md-6 col-lg-6 text-center">
+        <table class="table my_custom_table">
+            <thead class="my_custom_thead">
+            <tr>
+                <th colspan="5">
+                    Your items
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for cart_item in cart_items %}
+            <tr>
+                <td>
+                    <a href="cart_item.product.get_absolute_url"><img src="{{cart_item.product.image.url}}" width="100px" height="100px" alt="{{cart_item.product.name}}" class="float-left rounded custom_image" ></a>
+                </td>
+                <td class="text-left">
+                    {{cart_item.product.name}}
+                    <br>
+                    SKU : {{cart_item.product.id}}
+                    <br>
+                    <p style="color:#ff0000">Stock left :{{cart_item.product.stock}}</p>
+                    <br>
+                    Price: $ {{cart_item.product.price}}
+                    <br>
+                    Qty : {{cart_item.quantity}} x $ {{cart_item.product.price}}
+                    <br>
+                </td>
+                <td>
+                    summary: $ {{cart_item.sub_total}}
+                    <br>
+                </td>
+                {% if cart_item.quantity < cart_item.product.stock %}
+                <td>
+                    <a href="{% url 'cart:add_cart' cart_item.product.id %}" class="custom_a"><i class="fa-solid fa-plus custom_icon"> </i></a><br>
+                    &nbsp;<a href="{% url 'cart:cart_remove' cart_item.product.id %}" class="custom_a"><i class="fa-solid fa-minus custom_icon"></i></a><br>
+                    &nbsp;<a href="{% url 'cart:full_remove' cart_item.product.id %}" class="custom_a"><i class="fa-sharp fa-solid fa-trash"></i></a><br>
+                </td>
+                {% else %}
+                <td>
+                    &nbsp;<a href="{% url 'cart:cart_remove' cart_item.product.id %}" class="custom_a"><i class="fa-solid fa-minus custom_icon"></i></a><br>
+                    &nbsp;<a href="{% url 'cart:full_remove' cart_item.product.id %}" class="custom_icon"><i class="fa-sharp fa-solid fa-trash"></i></a>
+                </td>
+                {% endif %}
+
+            </tr>
+            {% endfor %}
+            </tbody>
+
+        </table>
+
+    </div>
+    <div class="col-12 col-sm-12 col-md-6 col-lg-6 text-center">
+        <table class="table my_custom_table">
+            <thead class="my_custom_thead">
+            <tr>
+                <th>
+                   <b>Checkout</b>
+                </th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    Please Review cart before proceeding
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Your total Amount is:<strong>{{ total }}</strong> $
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="mx-auto">
+            <a href="{% url 'ecomapp:allProdCat' %}" class="btn btn-secondary btn-block my_custom_button">Shope more</a>
+            <a href="{% url 'ecomapp:allProdCat' %}" class="btn btn-warning btn-block my_custom_button">Make Payment</a>
+
+        </div>
+    </div>
+
+</div>
+{% endif %}
+{% endblock %}
